@@ -1,0 +1,74 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-03-09 13:03:47.237611",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "name1",
+  "alias",
+  "interface",
+  "vlan_id",
+  "virtual_domain",
+  "ipnetmask"
+ ],
+ "fields": [
+  {
+   "fieldname": "name1",
+   "fieldtype": "Data",
+   "label": "Name"
+  },
+  {
+   "fieldname": "alias",
+   "fieldtype": "Data",
+   "label": "Alias"
+  },
+  {
+   "fieldname": "interface",
+   "fieldtype": "Data",
+   "label": "Interface"
+  },
+  {
+   "fieldname": "vlan_id",
+   "fieldtype": "Int",
+   "label": "VLAN ID"
+  },
+  {
+   "default": "root",
+   "fieldname": "virtual_domain",
+   "fieldtype": "Data",
+   "label": "Virtual Domain"
+  },
+  {
+   "fieldname": "ipnetmask",
+   "fieldtype": "Data",
+   "label": "IP/Netmask"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-03-09 13:06:31.758893",
+ "modified_by": "Administrator",
+ "module": "FinOps Network",
+ "name": "Network Interface",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

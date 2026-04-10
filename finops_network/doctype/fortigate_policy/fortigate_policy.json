@@ -1,0 +1,94 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-03-12 14:21:53.502303",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "policy_name",
+  "incoming_interface",
+  "outgoing_interface",
+  "source",
+  "destination",
+  "service",
+  "nat",
+  "ip_pool_configuration",
+  "enable_this_policy"
+ ],
+ "fields": [
+  {
+   "fieldname": "policy_name",
+   "fieldtype": "Data",
+   "label": "Policy Name"
+  },
+  {
+   "fieldname": "incoming_interface",
+   "fieldtype": "Data",
+   "label": "Incoming Interface"
+  },
+  {
+   "fieldname": "outgoing_interface",
+   "fieldtype": "Data",
+   "label": "Outgoing Interface"
+  },
+  {
+   "fieldname": "source",
+   "fieldtype": "Data",
+   "label": "Source"
+  },
+  {
+   "fieldname": "destination",
+   "fieldtype": "Data",
+   "label": "Destination"
+  },
+  {
+   "fieldname": "service",
+   "fieldtype": "Data",
+   "label": "Service"
+  },
+  {
+   "default": "0",
+   "fieldname": "nat",
+   "fieldtype": "Check",
+   "label": "NAT"
+  },
+  {
+   "fieldname": "ip_pool_configuration",
+   "fieldtype": "Select",
+   "label": "IP Pool Configuration",
+   "options": "Use Outgoing Interface Address\nUse Outgoing Interface Address"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable_this_policy",
+   "fieldtype": "Check",
+   "label": "Enable this policy"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-03-12 14:28:03.721725",
+ "modified_by": "Administrator",
+ "module": "FinOps Network",
+ "name": "Fortigate Policy",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

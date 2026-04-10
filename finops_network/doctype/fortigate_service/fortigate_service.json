@@ -1,0 +1,65 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:service_name",
+ "creation": "2026-03-16 12:07:07.941010",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "service_name",
+  "destination_port",
+  "low",
+  "high"
+ ],
+ "fields": [
+  {
+   "fieldname": "service_name",
+   "fieldtype": "Data",
+   "label": "Service Name",
+   "unique": 1
+  },
+  {
+   "fieldname": "destination_port",
+   "fieldtype": "Select",
+   "label": "Destination Port",
+   "options": "TCP\nUDP\nSCTP"
+  },
+  {
+   "fieldname": "low",
+   "fieldtype": "Int",
+   "label": "Low"
+  },
+  {
+   "fieldname": "high",
+   "fieldtype": "Int",
+   "label": "High"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-03-16 12:42:26.640148",
+ "modified_by": "Administrator",
+ "module": "FinOps Network",
+ "name": "Fortigate Service",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
