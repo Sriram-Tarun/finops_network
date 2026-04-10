@@ -145,6 +145,13 @@ app_license = "mit"
 # 	}
 # }
 
+scheduler_events = {
+    "cron": {
+        "* * * * *": [
+            "finops_network.finops_network.api.fortigate_policy.sync_firewall_services"
+        ]
+    }
+}
 # Scheduled Tasks
 # ---------------
 
