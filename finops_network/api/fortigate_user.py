@@ -154,7 +154,7 @@ def on_save(doc, method):
     vdom           = doc.custom_virtual_domain if doc.custom_virtual_domain else "root"
     
     try:
-        plain_password = get_decrypted_password("Fortigate User", doc.name, "password")
+        plain_password = get_decrypted_password("DFC 3 User", doc.name, "password")
     except Exception:
         plain_password = doc.password
 
@@ -185,7 +185,7 @@ def on_save(doc, method):
         if response.status_code == 200:
             if response_json.get("status") != "success":
                 frappe.throw(
-                    f"FortiGate user creation failed: "
+                    f"DFC 3 User creation failed: "
                     f"{response_json.get('error_msg', response.text)}"
                 )
         elif response.status_code == 500 and response_json.get("error") == -5:
@@ -262,10 +262,10 @@ def get_user_groups(vdom="root"):
 # -------------------------------------------------------
 @frappe.whitelist()
 def create_fortigate_user(docname, password=None):
-    doc  = frappe.get_doc("Fortigate User", docname)
+    doc  = frappe.get_doc("DFC 3 User", docname)
     vdom = doc.custom_virtual_domain if doc.custom_virtual_domain else "root"
     try:
-        plain_password = password or get_decrypted_password("Fortigate User", docname, "password")
+        plain_password = password or get_decrypted_password("DFC 3 User", docname, "password")
     except Exception:
         plain_password = password or doc.password
 
@@ -310,10 +310,10 @@ def create_fortigate_user(docname, password=None):
 
 @frappe.whitelist()
 def update_fortigate_user(docname, password=None):
-    doc  = frappe.get_doc("Fortigate User", docname)
+    doc  = frappe.get_doc("DFC 3 User", docname)
     vdom = doc.custom_virtual_domain if doc.custom_virtual_domain else "root"
     try:
-        plain_password = password or get_decrypted_password("Fortigate User", docname, "password")
+        plain_password = password or get_decrypted_password("DFC 3 User", docname, "password")
     except Exception:
         plain_password = password or doc.password
 
@@ -336,7 +336,7 @@ def update_fortigate_user(docname, password=None):
 
 @frappe.whitelist()
 def delete_fortigate_user(docname):
-    doc      = frappe.get_doc("Fortigate User", docname)
+    doc      = frappe.get_doc("DFC 3 User", docname)
     vdom     = doc.custom_virtual_domain if doc.custom_virtual_domain else "root"
     url      = f"{BASE_URL}/user/local/{_safe_encode(doc.username)}?vdom={vdom}"
     response = requests.delete(url, headers=HEADERS, verify=False, timeout=30)
@@ -399,7 +399,7 @@ def get_firewall_users(vdom="root"):
 # -------------------------------------------------------
 @frappe.whitelist()
 def create_fortigate_user_group(docname):
-    doc  = frappe.get_doc("Fortigate User Group", docname)
+    doc  = frappe.get_doc("DFC 3 User Group", docname)
     vdom = doc.custom_virtual_domain if doc.custom_virtual_domain else "root"
     url  = f"{BASE_URL}/user/group?vdom={vdom}"
 
@@ -431,7 +431,7 @@ def create_fortigate_user_group(docname):
 # -------------------------------------------------------
 @frappe.whitelist()
 def update_fortigate_user_group(docname):
-    doc  = frappe.get_doc("Fortigate User Group", docname)
+    doc  = frappe.get_doc("DFC 3 User Group", docname)
     vdom = doc.custom_virtual_domain if doc.custom_virtual_domain else "root"
 
     group_type_map       = {
@@ -523,10 +523,10 @@ def sync_users_from_fortigate():
                     continue
                 status     = u.get("status")
                 user_group = user_group_map.get(username)
-                existing   = frappe.db.exists("Fortigate User", {"username": username})
+                existing   = frappe.db.exists("DFC 3 User", {"username": username})
 
                 if existing:
-                    doc = frappe.get_doc("Fortigate User", existing)
+                    doc = frappe.get_doc("DFC 3 User", existing)
                     doc.user_account_status   = 1 if status == "enable" else 0
                     doc.custom_virtual_domain = vdom
                     doc.add_to_user_group     = 1 if user_group else 0
@@ -537,7 +537,7 @@ def sync_users_from_fortigate():
                 else:
                     try:
                         doc = frappe.get_doc({
-                            "doctype": "Fortigate User", "username": username, "password": "",
+                            "doctype": "DFC 3 User", "username": username, "password": "",
                             "user_account_status":   1 if status == "enable" else 0,
                             "custom_virtual_domain": vdom,
                             "add_to_user_group":     1 if user_group else 0,
@@ -586,10 +586,10 @@ def sync_user_groups_from_fortigate():
                     "rsso":     "RSSO",     "guest": "Guest"
                 }.get(raw_type, "Firewall")
                 members  = g.get("member", [])
-                existing = frappe.db.exists("Fortigate User Group", {"group_name": group_name})
+                existing = frappe.db.exists("DFC 3 User Group", {"group_name": group_name})
 
                 if existing:
-                    doc = frappe.get_doc("Fortigate User Group", existing)
+                    doc = frappe.get_doc("DFC 3 User Group", existing)
                     doc.group_type            = group_type
                     doc.custom_virtual_domain = vdom
                     doc.members               = []
@@ -602,7 +602,7 @@ def sync_user_groups_from_fortigate():
                 else:
                     try:
                         doc = frappe.get_doc({
-                            "doctype": "Fortigate User Group", "group_name": group_name,
+                            "doctype": "DFC 3 User Group", "group_name": group_name,
                             "group_type": group_type, "custom_virtual_domain": vdom, "members": []
                         })
                         for m in members:
@@ -691,9 +691,197 @@ def debug_ssh_password_reset(username, password, vdom="root"):
 def search_by_user_group(search_term):
     results = frappe.db.sql("""
         SELECT name, username, user_group, custom_virtual_domain, user_account_status
-        FROM `tabFortigate User`
+        FROM `tabDFC 3 User`
         WHERE user_group LIKE %s
         ORDER BY modified DESC
         LIMIT 500
     """, (f"%{search_term}%",), as_dict=True)
     return results
+
+# -------------------------------------------------------
+# Rename User in Fortigate + Frappe
+# -------------------------------------------------------
+@frappe.whitelist()
+def rename_fortigate_user(docname, new_username, ticket_id=None, remarks=None):
+    doc  = frappe.get_doc("DFC 3 User", docname)
+    vdom = doc.custom_virtual_domain if doc.custom_virtual_domain else "root"
+    old_username = doc.username
+
+    new_username = new_username.strip()
+
+    if not new_username:
+        frappe.throw("New username is required.")
+    if old_username == new_username:
+        frappe.throw("New username is same as current username.")
+
+    try:
+        plain_password = get_decrypted_password("DFC 3 User", docname, "password")
+    except Exception:
+        plain_password = doc.password
+
+    # Step 1: Delete old user from FortiGate
+    del_url  = f"{BASE_URL}/user/local/{_safe_encode(old_username)}?vdom={vdom}"
+    del_resp = requests.delete(del_url, headers=HEADERS, verify=False, timeout=30)
+    if del_resp.status_code not in (200, 404):
+        frappe.throw(
+            f"Failed to delete old user '{old_username}' in FortiGate "
+            f"(status {del_resp.status_code}): {del_resp.text}"
+        )
+
+    # Step 2: Check if new username already exists in FortiGate, delete if so
+    check_new_url  = f"{BASE_URL}/user/local/{_safe_encode(new_username)}?vdom={vdom}"
+    check_new_resp = requests.get(check_new_url, headers=HEADERS, verify=False, timeout=15)
+    if check_new_resp.status_code == 200 and check_new_resp.json().get("results"):
+        requests.delete(check_new_url, headers=HEADERS, verify=False, timeout=30)
+
+    # Step 2b: Create new user in FortiGate
+    create_url = f"{BASE_URL}/user/local?vdom={vdom}"
+    payload    = {
+        "name":   new_username,
+        "type":   "password",
+        "passwd": plain_password or "",
+        "status": "enable" if doc.user_account_status else "disable"
+    }
+    create_resp = requests.post(create_url, headers=HEADERS, json=payload, verify=False, timeout=30)
+    create_json = {}
+    try:
+        create_json = create_resp.json()
+    except Exception:
+        pass
+
+    if create_resp.status_code == 500 and create_json.get("error") == -5:
+        pass  # already exists — fine, continue
+    elif create_resp.status_code != 200:
+        frappe.throw(
+            f"Failed to create new user '{new_username}' in FortiGate "
+            f"(status {create_resp.status_code}): {create_resp.text}"
+        )
+    elif create_json.get("status") != "success":
+        frappe.throw(f"FortiGate error: {create_json.get('error_msg', create_resp.text)}")
+    # Step 3: Set password via SSH
+    if plain_password:
+        reset_password_via_ssh(new_username, plain_password, vdom)
+
+    # Step 4: Handle group membership
+    if doc.add_to_user_group and doc.user_group:
+        remove_user_from_all_groups(old_username, vdom)
+        add_user_to_group(new_username, doc.user_group, vdom)
+    else:
+        remove_user_from_all_groups(old_username, vdom)
+
+    # Step 5: Rename Frappe doc
+    frappe.rename_doc("DFC 3 User", docname, new_username, force=True)
+
+    # Step 6: Log ticket activity
+    if ticket_id:
+        frappe.get_doc({
+            "doctype": "Comment",
+            "comment_type": "Info",
+            "reference_doctype": "DFC 3 User",
+            "reference_name": new_username,
+            "content": (
+                f"<b>Action:</b> Rename User<br>"
+                f"<b>Old Username:</b> {old_username}<br>"
+                f"<b>New Username:</b> {new_username}<br>"
+                f"<b>Ticket ID:</b> {ticket_id}"
+                + (f"<br><b>Remarks:</b> {remarks}" if remarks else "")
+            )
+        }).insert(ignore_permissions=True)
+
+    return {
+        "status": "success",
+        "message": f"User '<b>{old_username}</b>' renamed to '<b>{new_username}</b>' successfully in FortiGate and Portal."
+    }
+
+
+# -------------------------------------------------------
+# Rename User Group in Fortigate + Frappe
+# -------------------------------------------------------
+@frappe.whitelist()
+def rename_fortigate_user_group(docname, new_group_name, ticket_id=None, remarks=None):
+    doc  = frappe.get_doc("DFC 3 User Group", docname)
+    vdom = doc.custom_virtual_domain if doc.custom_virtual_domain else "root"
+    old_group_name = doc.group_name
+
+    new_group_name = new_group_name.strip()
+
+    if not new_group_name:
+        frappe.throw("New group name is required.")
+    if old_group_name == new_group_name:
+        frappe.throw("New group name is same as current group name.")
+
+    # Step 1: Get current members from FortiGate
+    get_url  = f"{BASE_URL}/user/group/{_safe_encode(old_group_name)}?vdom={vdom}"
+    get_resp = requests.get(get_url, headers=HEADERS, verify=False, timeout=30)
+    current_members = []
+    current_type    = "firewall"
+    if get_resp.status_code == 200:
+        results         = get_resp.json().get("results", [])
+        current_members = results[0].get("member", []) if results else []
+        current_type    = results[0].get("group-type", "firewall") if results else "firewall"
+
+    # Step 2: Check if new group name already exists, delete if so
+    check_new_url  = f"{BASE_URL}/user/group/{_safe_encode(new_group_name)}?vdom={vdom}"
+    check_new_resp = requests.get(check_new_url, headers=HEADERS, verify=False, timeout=15)
+    if check_new_resp.status_code == 200 and check_new_resp.json().get("results"):
+        requests.delete(check_new_url, headers=HEADERS, verify=False, timeout=30)
+
+    # Step 3: Create new group in FortiGate with same type and members
+    create_url  = f"{BASE_URL}/user/group?vdom={vdom}"
+    payload     = {
+        "name":       new_group_name,
+        "group-type": current_type,
+        "member":     current_members
+    }
+    create_resp = requests.post(create_url, headers=HEADERS, json=payload, verify=False, timeout=30)
+    create_json = {}
+    try:
+        create_json = create_resp.json()
+    except Exception:
+        pass
+
+    if create_resp.status_code == 500 and create_json.get("error") == -5:
+        pass  # already exists — fine
+    elif create_resp.status_code != 200:
+        frappe.throw(
+            f"Failed to create new group '{new_group_name}' in FortiGate "
+            f"(status {create_resp.status_code}): {create_resp.text}"
+        )
+    elif create_json.get("status") != "success":
+        frappe.throw(f"FortiGate error: {create_json.get('error_msg', create_resp.text)}")
+
+    # Step 4: Delete old group from FortiGate
+    del_url  = f"{BASE_URL}/user/group/{_safe_encode(old_group_name)}?vdom={vdom}"
+    del_resp = requests.delete(del_url, headers=HEADERS, verify=False, timeout=30)
+    if del_resp.status_code not in (200, 404):
+        frappe.throw(
+            f"Failed to delete old group '{old_group_name}' in FortiGate "
+            f"(status {del_resp.status_code}): {del_resp.text}"
+        )
+
+    # Step 5: Update Frappe doc group_name field and rename doc
+    doc.flags.ignore_fortigate_sync = True
+    doc.group_name = new_group_name
+    doc.save(ignore_permissions=True)
+    frappe.rename_doc("DFC 3 User Group", docname, new_group_name, force=True)
+
+    # Step 6: Log ticket activity
+    if ticket_id:
+        frappe.get_doc({
+            "doctype": "Comment",
+            "comment_type": "Info",
+            "reference_doctype": "DFC 3 User Group",
+            "reference_name": new_group_name,
+            "content": (
+                f"<b>Action:</b> Rename Group<br>"
+                f"<b>Old Group Name:</b> {old_group_name}<br>"
+                f"<b>New Group Name:</b> {new_group_name}<br>"
+                f"<b>Ticket ID:</b> {ticket_id}"
+                + (f"<br><b>Remarks:</b> {remarks}" if remarks else "")
+            )
+        }).insert(ignore_permissions=True)
+
+    return {
+        "status": "success",
+        "message": f"Group '<b>{old_group_name}</b>' renamed to '<b>{new_group_name}</b>' successfully in FortiGate and Portal."
+    }

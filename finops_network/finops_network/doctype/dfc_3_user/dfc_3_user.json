@@ -1,0 +1,82 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-03-13 17:37:20.884180",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "username",
+  "password",
+  "account_settings_section",
+  "user_account_status",
+  "user_group_assignment_section",
+  "add_to_user_group",
+  "user_group"
+ ],
+ "fields": [
+  {
+   "fieldname": "username",
+   "fieldtype": "Data",
+   "label": "Username"
+  },
+  {
+   "fieldname": "password",
+   "fieldtype": "Password",
+   "label": "Password"
+  },
+  {
+   "fieldname": "account_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Account Settings"
+  },
+  {
+   "default": "1",
+   "fieldname": "user_account_status",
+   "fieldtype": "Check",
+   "label": "User Account Status"
+  },
+  {
+   "fieldname": "user_group_assignment_section",
+   "fieldtype": "Section Break",
+   "label": "User Group Assignment"
+  },
+  {
+   "default": "0",
+   "fieldname": "add_to_user_group",
+   "fieldtype": "Check",
+   "label": "Add to User Group"
+  },
+  {
+   "depends_on": "eval:doc.add_to_user_group==1",
+   "fieldname": "user_group",
+   "fieldtype": "Select",
+   "label": "User Group"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-03-13 17:47:05.308138",
+ "modified_by": "Administrator",
+ "module": "FinOps Network",
+ "name": "DFC 3 User",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,10 +1,10 @@
-import frappe
+```````````````````import frappe
 import requests
 
 
 @frappe.whitelist()
 def create_interface(docname):
-    doc = frappe.get_doc("Network Interface", docname)
+    doc = frappe.get_doc("DFC 3 Interface", docname)
 
     fortigate_ip = "154.210.151.180"
     api_token = "H1yt7w4Q0g6r3nyc1kzg504k7bnQHm"
@@ -57,7 +57,7 @@ def create_interface(docname):
 @frappe.whitelist()
 def update_interface(docname):
 
-    doc = frappe.get_doc("Network Interface", docname)
+    doc = frappe.get_doc("DFC 3 Interface", docname)
 
     fortigate_ip = "154.210.151.180"
     api_token = "H1yt7w4Q0g6r3nyc1kzg504k7bnQHm"
@@ -182,14 +182,14 @@ def sync_interfaces_from_fortigate():
                 if isinstance(ip, str) and " " in ip:
                     ip = ip.replace(" ", "/")
 
-                existing = frappe.db.exists("Network Interface", {
+                existing = frappe.db.exists("DFC 3 Interface", {
                     "interface": parent,
                     "vlan_id": vlan_id,
                     "virtual_domain": iface_vdom
                 })
 
                 if existing:
-                    doc = frappe.get_doc("Network Interface", existing)
+                    doc = frappe.get_doc("DFC 3 Interface", existing)
 
                     # ? Name changed ? delete old, re-insert with new name
                     if not doc.name1 or doc.name1 != name:
@@ -197,7 +197,7 @@ def sync_interfaces_from_fortigate():
                             doc.delete(ignore_permissions=True)
 
                             new_doc = frappe.get_doc({
-                                "doctype": "Network Interface",
+                                "doctype": "DFC 3 Interface",
                                 "name1": name,
                                 "alias": alias,
                                 "interface": parent,
@@ -225,7 +225,7 @@ def sync_interfaces_from_fortigate():
                     # ? New record — insert with FortiGate display name
                     try:
                         doc = frappe.get_doc({
-                            "doctype": "Network Interface",
+                            "doctype": "DFC 3 Interface",
                             "name1": name,
                             "alias": alias,
                             "interface": parent,

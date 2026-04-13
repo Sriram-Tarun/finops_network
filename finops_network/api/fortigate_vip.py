@@ -138,7 +138,7 @@ def delete_virtual_ip_on_fortigate(name, firewall_ip, api_token, vdom):
 @frappe.whitelist()
 def create_virtual_ip(docname):
 
-    doc         = frappe.get_doc("Fortigate Virtual IP", docname)
+    doc         = frappe.get_doc("DFC 3 Virtual IP", docname)
     firewall_ip = "154.210.151.180"
     api_token   = "H1yt7w4Q0g6r3nyc1kzg504k7bnQHm"
 
@@ -184,7 +184,7 @@ def create_virtual_ip(docname):
 @frappe.whitelist()
 def update_virtual_ip(docname):
 
-    doc         = frappe.get_doc("Fortigate Virtual IP", docname)
+    doc         = frappe.get_doc("DFC 3 Virtual IP", docname)
     firewall_ip = "154.210.151.180"
     api_token   = "H1yt7w4Q0g6r3nyc1kzg504k7bnQHm"
 
@@ -343,12 +343,12 @@ def sync_virtual_ips_from_fortigate():
                     mapped_port = str(v.get("mappedport") or "").strip()
 
                 existing = frappe.db.exists(
-                    "Fortigate Virtual IP",
+                    "DFC 3 Virtual IP",
                     {"name1": name, "custom_virtual_domain": vdom}
                 )
 
                 if existing:
-                    doc = frappe.get_doc("Fortigate Virtual IP", existing)
+                    doc = frappe.get_doc("DFC 3 Virtual IP", existing)
 
                     doc.external_ip_addressrange = ext_ip
                     doc.ipv4_addressrange         = mapped_ip
@@ -363,7 +363,7 @@ def sync_virtual_ips_from_fortigate():
 
                 else:
                     doc = frappe.get_doc({
-                        "doctype":                   "Fortigate Virtual IP",
+                        "doctype":                   "DFC 3 Virtual IP",
                         "name1":                     name,
                         "external_ip_addressrange":  ext_ip,
                         "ipv4_addressrange":         mapped_ip,

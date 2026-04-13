@@ -124,11 +124,11 @@ def sync_services_from_fortigate():
                         low = 0
                         high = 0
 
-                exists = frappe.db.get_value("Fortigate Service", {"name": doc_name}, "name")
+                exists = frappe.db.get_value("DFC 3 Service", {"name": doc_name}, "name")
 
                 if exists:
                     current = frappe.db.get_value(
-                        "Fortigate Service",
+                        "DFC 3 Service",
                         {"name": doc_name},
                         ["service_name", "destination_port", "low", "high", "custom_virtual_domain"],
                         as_dict=True
@@ -145,7 +145,7 @@ def sync_services_from_fortigate():
 
                     if changed:
                         frappe.db.sql("""
-                            UPDATE `tabFortigate Service`
+                            UPDATE `tabDFC 3 Service`
                             SET service_name = %s,
                                 destination_port = %s,
                                 low = %s,
@@ -162,7 +162,7 @@ def sync_services_from_fortigate():
                 else:
                     try:
                         frappe.db.sql("""
-                            INSERT INTO `tabFortigate Service`
+                            INSERT INTO `tabDFC 3 Service`
                                 (name, service_name, destination_port, low, high,
                                  custom_virtual_domain, owner, creation, modified,
                                  modified_by, docstatus)
@@ -182,7 +182,7 @@ def sync_services_from_fortigate():
             "status": "success",
             "created": created,
             "updated": updated,
-            "total": frappe.db.count("Fortigate Service")
+            "total": frappe.db.count("DFC 3 Service")
         }
 
     except Exception as e:

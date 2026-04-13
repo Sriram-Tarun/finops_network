@@ -64,7 +64,7 @@ def build_payload(doc):
 # ---------------------------------------------
 @frappe.whitelist()
 def create_address(docname):
-    doc = frappe.get_doc("Fortigate Address", docname)
+    doc = frappe.get_doc("DFC 3 Address", docname)
 
     vdom = doc.custom_virtual_domain if doc.custom_virtual_domain else "root"
     url = f"https://{FIREWALL_IP}/api/v2/cmdb/firewall/address?vdom={vdom}"
@@ -92,7 +92,7 @@ def create_address(docname):
 # ---------------------------------------------
 @frappe.whitelist()
 def update_address(docname):
-    doc = frappe.get_doc("Fortigate Address", docname)
+    doc = frappe.get_doc("DFC 3 Address", docname)
 
     vdom = doc.custom_virtual_domain if doc.custom_virtual_domain else "root"
     url = f"https://{FIREWALL_IP}/api/v2/cmdb/firewall/address/{doc.name}?vdom={vdom}"
@@ -199,10 +199,10 @@ def sync_addresses_from_fortigate():
                     frappe_type = "Subnet"
 
                 # -- Save to Frappe -------------------------------------
-                existing = frappe.db.exists("Fortigate Address", {"name1": name})
+                existing = frappe.db.exists("DFC 3 Address", {"name1": name})
 
                 if existing:
-                    doc = frappe.get_doc("Fortigate Address", existing)
+                    doc = frappe.get_doc("DFC 3 Address", existing)
                     doc.type = frappe_type
                     doc.custom_virtual_domain = vdom  # ? Save VDOM
 
@@ -218,7 +218,7 @@ def sync_addresses_from_fortigate():
 
                 else:
                     new_doc = {
-                        "doctype": "Fortigate Address",
+                        "doctype": "DFC 3 Address",
                         "name1": name,
                         "type": frappe_type,
                         "custom_virtual_domain": vdom  # ? Save VDOM

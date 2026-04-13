@@ -14,14 +14,14 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Service",
-   "options": "Fortigate Service"
+   "options": "DFC 3 Service"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-04-09 22:20:14.545858",
+ "modified": "2026-04-13 11:16:35.082098",
  "modified_by": "Administrator",
  "module": "FinOps Network",
  "name": "Service Group Member",

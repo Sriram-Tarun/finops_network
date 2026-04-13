@@ -14,14 +14,14 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Username",
-   "options": "Fortigate User"
+   "options": "DFC 3 User"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-04-09 22:19:24.568985",
+ "modified": "2026-04-11 00:48:37.154939",
  "modified_by": "Administrator",
  "module": "FinOps Network",
  "name": "Fortigate User Group Member",

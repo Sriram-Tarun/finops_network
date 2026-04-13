@@ -125,7 +125,7 @@ def _fetch_one_address_endpoint(url):
 # -------------------------------------------------------
 @frappe.whitelist()
 def create_policy(docname):
-    doc  = frappe.get_doc("Fortigate Policy", docname)
+    doc  = frappe.get_doc("DFC 3 Policy", docname)
     vdom = doc.custom_virtual_domain if doc.custom_virtual_domain else "root"
     url  = f"{BASE_URL}/firewall/policy?vdom={vdom}"
 
@@ -167,7 +167,7 @@ def create_policy(docname):
 
 @frappe.whitelist()
 def update_policy(docname):
-    doc = frappe.get_doc("Fortigate Policy", docname)
+    doc = frappe.get_doc("DFC 3 Policy", docname)
     if not doc.custom_firewall_policy_id:
         frappe.throw("Policy not created in FortiGate yet")
 
@@ -180,7 +180,7 @@ def update_policy(docname):
     services = []
     for row in doc.custom_services:
         if row.service:
-            svc_doc     = frappe.db.get_value("Fortigate Service", row.service, "service_name", as_dict=True)
+            svc_doc     = frappe.db.get_value("DFC 3 Service", row.service, "service_name", as_dict=True)
             actual_name = svc_doc.service_name if svc_doc else row.service
             services.append({"name": actual_name})
 
@@ -326,12 +326,12 @@ def get_services(vdom="root"):
 
     for svc_name in services:
         unique_name = f"{svc_name}-{vdom}"
-        if frappe.db.exists("Fortigate Service", unique_name):
+        if frappe.db.exists("DFC 3 Service", unique_name):
             continue
-        if frappe.db.exists("Fortigate Service", svc_name):
+        if frappe.db.exists("DFC 3 Service", svc_name):
             continue
         try:
-            svc_doc                       = frappe.new_doc("Fortigate Service")
+            svc_doc                       = frappe.new_doc("DFC 3 Service")
             svc_doc.name                  = unique_name
             svc_doc.service_name          = svc_name
             svc_doc.custom_virtual_domain = vdom
@@ -460,17 +460,17 @@ def sync_policies_from_fortigate():
                     if pool_list:
                         ip_pool = pool_list[0].get("name", "")
 
-                existing = frappe.db.exists("Fortigate Policy", {
+                existing = frappe.db.exists("DFC 3 Policy", {
                     "custom_firewall_policy_id": str(policy_id),
                     "custom_virtual_domain":     vdom
                 })
                 if not existing:
-                    existing = frappe.db.exists("Fortigate Policy", {
+                    existing = frappe.db.exists("DFC 3 Policy", {
                         "policy_name":           name,
                         "custom_virtual_domain": vdom
                     })
 
-                doc = frappe.get_doc("Fortigate Policy", existing) if existing else frappe.new_doc("Fortigate Policy")
+                doc = frappe.get_doc("DFC 3 Policy", existing) if existing else frappe.new_doc("DFC 3 Policy")
 
                 doc.policy_name               = name
                 doc.custom_firewall_policy_id = str(policy_id)

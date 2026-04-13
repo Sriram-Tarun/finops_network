@@ -48,7 +48,7 @@ def get_vdom_list():
 
 @frappe.whitelist()
 def create_service_group(docname):
-    doc = frappe.get_doc("Fortigate Service Group", docname)
+    doc = frappe.get_doc("DFC 3 Service Group", docname)
 
     vdom = doc.custom_virtual_domain or "root"
 
@@ -80,7 +80,7 @@ def create_service_group(docname):
                 )
             frappe.throw(f"FortiGate Error: {str(result)}")
 
-        frappe.db.set_value("Fortigate Service Group", docname, "custom_firewall_created", 1)
+        frappe.db.set_value("DFC 3 Service Group", docname, "custom_firewall_created", 1)
         frappe.db.commit()
 
         return f"Service Group '{doc.group_name.strip()}' created in FortiGate (VDOM: {vdom})"
@@ -92,7 +92,7 @@ def create_service_group(docname):
 
 @frappe.whitelist()
 def update_service_group(docname):
-    doc = frappe.get_doc("Fortigate Service Group", docname)
+    doc = frappe.get_doc("DFC 3 Service Group", docname)
 
     if not doc.custom_virtual_domain:
         frappe.throw("VDOM is required to update service group.")
@@ -183,7 +183,7 @@ def sync_service_groups_from_fortigate():
 
                 # ? Find existing doc by group_name + vdom (NOT by the old unique_name pattern)
                 doc_name = frappe.db.get_value(
-                    "Fortigate Service Group",
+                    "DFC 3 Service Group",
                     {
                         "group_name": group_name,
                         "custom_virtual_domain": vdom
@@ -204,7 +204,7 @@ def sync_service_groups_from_fortigate():
 
                     if changed:
                         frappe.db.sql("""
-                            UPDATE `tabFortigate Service Group`
+                            UPDATE `tabDFC 3 Service Group`
                             SET custom_firewall_created = 1,
                                 modified = NOW(),
                                 modified_by = %s
@@ -224,7 +224,7 @@ def sync_service_groups_from_fortigate():
                             """, (
                                 frappe.generate_hash(length=10),
                                 doc_name,
-                                "Fortigate Service Group",
+                                "DFC 3 Service Group",
                                 "members",
                                 idx,
                                 svc_name
@@ -237,11 +237,11 @@ def sync_service_groups_from_fortigate():
                     # Use group_name as doc name; if duplicate exists (same name diff vdom),
                     # append vdom to make it unique
                     new_doc_name = group_name
-                    if frappe.db.exists("Fortigate Service Group", new_doc_name):
+                    if frappe.db.exists("DFC 3 Service Group", new_doc_name):
                         new_doc_name = f"{group_name}-{vdom}"
 
                     frappe.db.sql("""
-                        INSERT INTO `tabFortigate Service Group`
+                        INSERT INTO `tabDFC 3 Service Group`
                         (name, group_name, custom_virtual_domain,
                          custom_firewall_created, owner, creation,
                          modified, modified_by, docstatus)
@@ -262,7 +262,7 @@ def sync_service_groups_from_fortigate():
                         """, (
                             frappe.generate_hash(length=10),
                             new_doc_name,
-                            "Fortigate Service Group",
+                            "DFC 3 Service Group",
                             "members",
                             idx,
                             svc_name
@@ -276,7 +276,7 @@ def sync_service_groups_from_fortigate():
             "status": "success",
             "created": created,
             "updated": updated,
-            "total": frappe.db.count("Fortigate Service Group")
+            "total": frappe.db.count("DFC 3 Service Group")
         }
 
     except Exception as e:

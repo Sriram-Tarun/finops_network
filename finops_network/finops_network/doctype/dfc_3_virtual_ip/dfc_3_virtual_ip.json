@@ -1,0 +1,87 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:name1",
+ "creation": "2026-03-17 17:16:38.139507",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "name1",
+  "external_ip_addressrange",
+  "ipv4_addressrange",
+  "port_forwarding",
+  "port_mapping_type",
+  "external_service_port",
+  "map_to_ipv4_port"
+ ],
+ "fields": [
+  {
+   "fieldname": "name1",
+   "fieldtype": "Data",
+   "label": "Name",
+   "unique": 1
+  },
+  {
+   "fieldname": "external_ip_addressrange",
+   "fieldtype": "Data",
+   "label": "External IP address/range"
+  },
+  {
+   "fieldname": "ipv4_addressrange",
+   "fieldtype": "Data",
+   "label": "IPv4 address/range"
+  },
+  {
+   "default": "0",
+   "fieldname": "port_forwarding",
+   "fieldtype": "Check",
+   "label": "Port Forwarding"
+  },
+  {
+   "depends_on": "eval:doc.port_forwarding",
+   "fieldname": "port_mapping_type",
+   "fieldtype": "Select",
+   "label": "Port Mapping Type",
+   "options": "One to one\nMany to many"
+  },
+  {
+   "depends_on": "eval:doc.port_forwarding",
+   "fieldname": "external_service_port",
+   "fieldtype": "Data",
+   "label": "External service port "
+  },
+  {
+   "depends_on": "eval:doc.port_forwarding",
+   "fieldname": "map_to_ipv4_port",
+   "fieldtype": "Data",
+   "label": "Map to IPv4 port"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-03-17 17:54:35.612795",
+ "modified_by": "Administrator",
+ "module": "FinOps Network",
+ "name": "DFC 3 Virtual IP",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
